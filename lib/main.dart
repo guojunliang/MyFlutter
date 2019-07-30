@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_flutter/SharedPreferenceTest.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,6 +46,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _result = "未知结果";
 
   void _incrementCounter() {
     setState(() {
@@ -91,13 +93,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
+            RaisedButton(
+              onPressed: _testPush2, child: Text("测试SharedPreferences"),),
+            Text(_result, style: TextStyle(fontSize: 20),)
           ],
         ),
       ),
@@ -108,4 +106,38 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+
+  void _testSPRouter() async {
+    var push = await Navigator.push(
+        context, new MaterialPageRoute(builder: (context) {
+      return new SharedPreferenceTest("123");
+    }, maintainState: true));
+    if (push != null) {
+      setState(() {
+        _result = push;
+      });
+    }
+  }
+
+  void _testPush2() async{
+    var result = await Navigator.push(
+        context, new PageRouteBuilder(pageBuilder: (context, _, __) {
+      return new SharedPreferenceTest("hahaha");
+    },
+      transitionsBuilder: (context, Animation<double> animation, _,
+          Widget child) {
+        return FadeTransition(opacity: animation,
+          child: new RotationTransition(
+            turns: new Tween(begin: 0.0, end: 1.0).animate(animation),
+            child: child,),);
+      },
+      transitionDuration: Duration(seconds: 1),));
+    if (result != null) {
+//      Scaffold.of(context).showSnackBar(
+//          SnackBar(content: Text("$result"), duration: Duration(seconds: 2),));
+    }
+  }
 }
+
+
