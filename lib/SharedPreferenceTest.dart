@@ -7,9 +7,19 @@ class SharedPreferenceTest extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SharedPreferenceState(_data);
+//    return SharedPreferenceState(_data);
+    return TestState();
   }
 
+}
+
+class TestState extends State<SharedPreferenceTest> {
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(appBar: AppBar(centerTitle: true,),
+      body: Center(child: Text("ceshiyixiaxia"),),);
+  }
 }
 
 class SharedPreferenceState extends State<SharedPreferenceTest> {
@@ -35,7 +45,7 @@ class SharedPreferenceState extends State<SharedPreferenceTest> {
   }
 
   _pop() {
-    Navigator.pop(context,"hello");
+    Navigator.pop(context, "hello");
   }
 
   @override

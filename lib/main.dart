@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_flutter/SharedPreferenceTest.dart';
+import 'package:my_flutter/SecondView.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,6 +10,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      routes: {
+        "/": (BuildContext contxt) => new MyHomePage(title: "first page"),
+        "/second": (BuildContext context) => SecondViewWidget("")
+      },
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -21,7 +26,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+//      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -94,8 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
-              onPressed: _testPush2, child: Text("测试SharedPreferences"),),
-            Text(_result, style: TextStyle(fontSize: 20),)
+              onPressed: _testPush3, child: Text("跳转到第二个页面"),),
+//            Text(_result, style: TextStyle(fontSize: 20),)
           ],
         ),
       ),
@@ -120,24 +125,34 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void _testPush2() async{
-    var result = await Navigator.push(
-        context, new PageRouteBuilder(pageBuilder: (context, _, __) {
-      return new SharedPreferenceTest("hahaha");
-    },
-      transitionsBuilder: (context, Animation<double> animation, _,
-          Widget child) {
-        return FadeTransition(opacity: animation,
-          child: new RotationTransition(
-            turns: new Tween(begin: 0.0, end: 1.0).animate(animation),
-            child: child,),);
-      },
-      transitionDuration: Duration(seconds: 1),));
+  void _testPush() async {
+    String result = await Navigator.push(
+      context, new MaterialPageRoute<String>(builder: (context) {
+      return new SecondViewWidget("from fist value");
+    }, maintainState: false),);
     if (result != null) {
-//      Scaffold.of(context).showSnackBar(
-//          SnackBar(content: Text("$result"), duration: Duration(seconds: 2),));
+      print("result:$result");
     }
   }
+
+  void _testPush2() {
+    Navigator.push(context,
+        new PageRouteBuilder(pageBuilder: (context, _, __) {
+          return new SecondViewWidget("from fist value");
+        }, transitionsBuilder: (context, Animation<double> animation, _,
+            Widget child) {
+          return FadeTransition(opacity: animation,
+              child: new RotationTransition(
+                turns: Tween<double>(begin: 0.5, end: 1.0).animate(animation),
+                child: child,));
+        },
+            transitionDuration: Duration(seconds: 1)));
+  }
+
+  void _testPush3() {
+    Navigator.pushNamed(context, "/second", arguments: "from fistView");
+  }
+
 }
 
 
