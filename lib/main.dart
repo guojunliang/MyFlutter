@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_flutter/SharedPreferenceTest.dart';
+import 'package:my_flutter/sp_test.dart';
 import 'package:my_flutter/SecondView.dart';
+import 'package:my_flutter/sqflite_demo.dart';
+import 'package:my_flutter/SqfLiteHelper.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +14,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       routes: {
         "/": (BuildContext contxt) => new MyHomePage(title: "first page"),
-        "/second": (BuildContext context) => SecondViewWidget("")
+        "/second": (BuildContext context) => SecondViewWidget(""),
+        "/sp": (BuildContext context) => SpTest(),
+        "/sqflite":(BuildContext context)=>SqfliteWidget(),
       },
       theme: ThemeData(
         // This is the theme of your application.
@@ -101,6 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
             RaisedButton(
               onPressed: _testPush3, child: Text("跳转到第二个页面"),),
 //            Text(_result, style: TextStyle(fontSize: 20),)
+            RaisedButton(onPressed: () {
+              Navigator.pushNamed(context, "/sp");
+            }, child: Text("测试SharedPreference"),),
+            RaisedButton(onPressed: (){
+              Navigator.pushNamed(context, "/sqflite");
+            },child: Text("测试sqfLite"),)
           ],
         ),
       ),
@@ -116,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _testSPRouter() async {
     var push = await Navigator.push(
         context, new MaterialPageRoute(builder: (context) {
-      return new SharedPreferenceTest("123");
+      return new SpTest();
     }, maintainState: true));
     if (push != null) {
       setState(() {
